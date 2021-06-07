@@ -27,15 +27,12 @@ outside   = false
 max_force         = 0.01
 #view of neighbor agents
 radius_view       = 150
-#weights for velocity forces
-alignment_weight  = 30
-cohesion_weight   =20
-separation_weight =25
+
 
 [agent]
 height    = 8
 width     = 10
 dt        = 0.2
 mass      = 20
-max_speed = 7.0
-min_speed = 4.0
+max_speed = 15
+min_speed = 10

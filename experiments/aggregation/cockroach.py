@@ -1,11 +1,11 @@
 import numpy as np
 import pygame
-
+import time
 from typing import Tuple
-
 from simulation.agent import Agent
 from simulation.utils import normalize, truncate
 from experiments.aggregation.config import config
+from experiments.aggregation.FSM import CockroachStateMAchine
 
 """
 Specific ant properties and helperfunctions 
@@ -13,32 +13,12 @@ Specific ant properties and helperfunctions
 
 
 class Cockroach(Agent):
-    """
-    Class that represents a ant (i.e. a simulated virtual "bird": bird-oid object). This class inherits the behavior
-    from the base class Agent.
 
-    Attributes:
-    ----------
-        flock:
-        steering:
-        mass:
-        v:
-        pos:
-
-    """
 
     def __init__(
-            self, pos, v, flock, index: int, image: str = "experiments/aggregation/images/ant.png"
+            self, pos, v, cockroach, index: int, image: str = "experiments/aggregation/images/ant.png"
     ) -> None:
-        """
-        Args:
-        ----
-            pos:
-            v:
-            flock:
-            index (int):
-            image (str): Defaults to "experiments/flocking/images/normal-ant.png"
-        """
+
         super(Cockroach, self).__init__(
             pos,
             v,
@@ -52,80 +32,79 @@ class Cockroach(Agent):
             index=index
         )
 
-        self.flock = flock
+        self.cockroach = cockroach
+
+    def slow_down(self) -> None:
+        i = 5
+        while(i !=0):
+            self.min_speed = i
+            self.max_speed = i
+            i = i-1
+    def stop_moving(self) -> None:
+        self.min_speed = 0
+        self.max_speed = 0
+
+
+
+    def change_state(self) -> None:
+        state = CockroachStateMAchine()
+        m, sd = 0.4, 0.15  # mean and standard deviation
+        pjoin = np.random.normal(m, sd) + (self.neighbors()/100)
+        u = np.random.uniform(0.0, 1.0)
+        for site in self.cockroach.objects.sites:
+            collide = pygame.sprite.collide_mask(self, site)
+            if bool(collide) and pjoin > u:
+                state.joining_start()
+        if state.is_joining:
+            start_time = time.time()
+            elapsed_time = time.time() - start_time
+            if elapsed_time >= 2:
+                self.stop_moving()
+                state.still_start
+        if state.is_still:
+            self.wander()
+            state.leaving_start()
+        if state.is_leaving:
+            state.wandering_start()
+        print(state.current_state)
+
+
+
 
     def update_actions(self) -> None:
-        """
-        Every change between frames happens here. This function is called by the method "update" in the class Swarm,
-        for every agent/object. Here, it is checked if there is an obstacle in collision (in which case it avoids it by
-        going to the opposite direction), align force, cohesion force and separate force between the agent and its neighbors
-        is calculated, and the steering force and direction of the agent are updated
-        """
-
         # avoid any obstacles in the environment
-        for obstacle in self.flock.objects.obstacles:
+
+        state = CockroachStateMAchine()
+        m, sd = 0.4, 0.15  # mean and standard deviation
+        pjoin = np.random.normal(m, sd) + (self.neighbors() / 100)
+        u = np.random.uniform(0.0, 1.0)
+        for site in self.cockroach.objects.sites:
+            collide = pygame.sprite.collide_mask(self, site)
+            if bool(collide) and pjoin > u:
+                start_time = time.time()
+                state.joining_start()
+        if state.is_joining:
+            elapsed_time = (time.time() - start_time) * 1000
+            print(elapsed_time)
+            if elapsed_time >= 0.3:
+                self.stop_moving()
+                state.still_start
+        if state.is_still:
+            state.leaving_start()
+        if state.is_leaving:
+            state.wandering_start()
+        for obstacle in self.cockroach.objects.obstacles:
             collide = pygame.sprite.collide_mask(self, obstacle)
             if bool(collide):
                 self.avoid_obstacle()
 
-        align_force, cohesion_force, separate_force = self.neighbor_forces()
+    def neighbors(self) -> int:
+        n_neighbors = 0
+        neighbors = self.cockroach.find_neighbors(self, config["ant"]["radius_view"])
+        for n in neighbors:
+            n_neighbors += 1
+        return n_neighbors
 
-        # combine the vectors in one
-        steering_force = (
-                align_force * config["ant"]["alignment_weight"]
-                + cohesion_force * config["ant"]["cohesion_weight"]
-                + separate_force * config["ant"]["separation_weight"]
-        )
 
-        # adjust the direction of the ant
-        self.steering += truncate(
-            steering_force / self.mass, config["ant"]["max_force"]
-        )
 
-    def neighbor_forces(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """
-        Find the neighbors of the agent and compute the total align force (force required to align agent with its neighbors'
-        total force), cohesion force (force required to move the agent towards the center of mass of its neighbors)
-        and separate force considering the total amount of neighbors close to the agent
-        """
-        # find all the neighbors of a ant based on its radius view
-        neighbors = self.flock.find_neighbors(self, config["ant"]["radius_view"])
 
-        #
-        # if there are neighbors, estimate the influence of their forces
-
-        if neighbors:
-            pre_align_force, pre_cohesion_force, separate_force = self.flock.find_neighbor_velocity_center_separation(self,
-                                                                                                                      neighbors)
-            align_force = self.align(pre_align_force)
-            cohesion_force = self.cohesion(pre_cohesion_force)
-        #
-        else:
-            align_force, cohesion_force, separate_force = (
-                np.zeros(2),
-                np.zeros(2),
-                np.zeros(2)
-            )
-        return align_force, cohesion_force, separate_force
-
-    def align(self, neighbor_force: np.ndarray):
-        """
-        Function to align the agent in accordance to neighbor velocity
-
-        Args:
-            neighbor_force (np.ndarray):
-
-        """
-        return normalize(neighbor_force - self.v)
-
-    def cohesion(self, neighbor_center):
-        """
-        Function to move the agent towards the center of mass of its neighbors
-
-        Args:
-        ----
-            neighbor_center:
-
-        """
-        force = neighbor_center - self.pos
-        return normalize(force - self.v)

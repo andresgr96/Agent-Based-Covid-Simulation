@@ -6,9 +6,10 @@ import pygame
 
 from typing import Union, Tuple
 
-from experiments.aggregation.aggregation import Aggregations
+from experiments.aggregation.aggregation import Aggregations, Cockroach
 from experiments.covid.population import Population
 from experiments.flocking.flock import Flock
+
 
 
 def _plot_covid(data) -> None:
@@ -135,6 +136,7 @@ class Simulation:
         """
         # initialize the environment and agent/obstacle positions
         self.initialize()
+
         # the simulation loop, infinite until the user exists the simulation
         # finite time parameter or infinite
 
@@ -143,7 +145,7 @@ class Simulation:
             while self.running:
                 init = time.time()
                 self.simulate()
-                print(time.time() - init)
+
 
             self.plot_simulation()
         else:

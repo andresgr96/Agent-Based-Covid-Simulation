@@ -68,32 +68,7 @@ class Aggregations(Swarm):
             ):
                 coordinates = generate_coordinates(self.screen)
 
-            self.add_agent(Cockroach(pos=np.array(coordinates), v=None, flock=self, index=index))
+            self.add_agent(Cockroach(pos=np.array(coordinates), v=None, cockroach=self, index=index))
 
-    def find_neighbor_velocity_center_separation(self, boid: Agent, neighbors: list) -> Tuple[float, float, float]:
-        """
-        Compute the total averaged sum of the neighbors' velocity, position and distance with regards to the considered
-        agent
-        :param boid: Agent
-        :param neighbors: list
 
-        """
-        neighbor_sum_v, neighbor_sum_pos, separate = (
-            np.zeros(2),
-            np.zeros(2),
-            np.zeros(2),
-        )
-
-        for neigh in neighbors:
-            neighbor_sum_v += neigh.v
-            neighbor_sum_pos += neigh.pos
-            difference = (
-                    boid.pos - neigh.pos
-            )  # compute the distance vector (v_x, v_y)
-            difference /= norm(
-                difference
-            )  # normalize to unit vector with respect to its maginiture
-            separate += difference  # add the influences of all neighbors up
-
-        return neighbor_sum_v / len(neighbors), neighbor_sum_pos / len(neighbors), separate / len(neighbors)
 
