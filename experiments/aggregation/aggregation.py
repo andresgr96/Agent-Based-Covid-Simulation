@@ -8,7 +8,7 @@ from typing import Tuple
 from simulation.agent import Agent
 from simulation.utils import normalize, truncate
 
-experiment = "stage2.1"
+experiment = "stage1"
 
 
 
@@ -32,25 +32,25 @@ class Aggregations(Swarm):
         if experiment == "stage2.0":
             object_loc = config["first_circle"]["object_location"]
             self.objects.add_object(
-                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="obstacle"
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
             )
             object_loc = config["second_circle"]["object_location"]
             self.objects.add_object(
-                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="obstacle"
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
             )
         elif experiment == "stage1":
             object_loc = config["center_circle"]["object_location"]
             self.objects.add_object(
-                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="obstacle"
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
             )
         if experiment == "stage2.1":
             object_loc = config["first_circle"]["object_location"]
             self.objects.add_object(
-                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="obstacle"
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
             )
             object_loc = config["second_circle"]["object_location"]
             self.objects.add_object(
-                file="experiments/aggregation/images/greyc2.png", pos=object_loc, scale=[230, 230], obj_type="obstacle"
+                file="experiments/aggregation/images/greyc2.png", pos=object_loc, scale=[230, 230], obj_type="site"
             )
 
 
