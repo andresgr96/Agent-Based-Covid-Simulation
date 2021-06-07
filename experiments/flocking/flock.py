@@ -43,7 +43,7 @@ class Flock(Swarm):  # also access methods from the super class Swarm
             if config["flock"]["outside"]:
                 scale = [300, 300]
             else:
-                scale = [800, 800]
+                scale = [1000, 1000]
 
             filename = (
                 "experiments/flocking/images/convex.png"
@@ -53,6 +53,14 @@ class Flock(Swarm):  # also access methods from the super class Swarm
 
             self.objects.add_object(
                 file=filename, pos=object_loc, scale=scale, obj_type="obstacle"
+            )
+            object_loc = config["first_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200,200], obj_type="obstacle"
+            )
+            object_loc = config["second_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200,200], obj_type="obstacle"
             )
 
             min_x, max_x = area(object_loc[0], scale[0])

@@ -28,7 +28,7 @@ class Boid(Agent):
     """
 
     def __init__(
-            self, pos, v, flock, index: int, image: str = "experiments/flocking/images/normal-boid.png"
+            self, pos, v, flock, index: int, image: str = "experiments/aggregation/images/ant.png"
     ) -> None:
         """
         Args:

@@ -3,25 +3,31 @@ swarm_type       = 'flock'
 n_agents = 40
 object_location  = [500, 500]
 
+[first_circle]
+object_location  = [200, 500]
+
+[second_circle]
+object_location  = [800, 500]
+
 [screen]
 frames = inf
 height = 1000
 width  = 1000
 
 [flock]
-convex    = true
-obstacles = false
+convex    = false
+obstacles = true
 outside   = false
 
 [boid]
 #velocity force
-max_force         = 8.0
+max_force         = 0.01
 #view of neighbor agents
-radius_view       = 205
+radius_view       = 150
 #weights for velocity forces
-alignment_weight  = 8.5
-cohesion_weight   = 7.5
-separation_weight = 6.0
+alignment_weight  = 30
+cohesion_weight   =20
+separation_weight =25
 
 [agent]
 height    = 8

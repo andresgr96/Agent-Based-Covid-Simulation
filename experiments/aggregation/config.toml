@@ -1,2 +1,41 @@
 [base]
 swarm_type       = 'aggregation'
+n_agents = 40
+object_location  = [500, 500]
+
+[first_circle]
+object_location  = [200, 500]
+
+[second_circle]
+object_location  = [800, 500]
+
+[center_circle]
+object_location  = [500, 500]
+
+[screen]
+frames = inf
+height = 1000
+width  = 1000
+
+[environment]
+convex    = false
+obstacles = true
+outside   = false
+
+[ant]
+#velocity force
+max_force         = 0.01
+#view of neighbor agents
+radius_view       = 150
+#weights for velocity forces
+alignment_weight  = 30
+cohesion_weight   =20
+separation_weight =25
+
+[agent]
+height    = 8
+width     = 10
+dt        = 0.2
+mass      = 20
+max_speed = 7.0
+min_speed = 4.0
