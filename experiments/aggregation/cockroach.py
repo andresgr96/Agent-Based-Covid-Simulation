@@ -48,19 +48,18 @@ class Cockroach(Agent):
 
     def change_state(self) -> None:
         state = CockroachStateMAchine()
-        m, sd = 0.4, 0.15  # mean and standard deviation
+        m, sd = config["probability"]["m"], config["probability"]["sd"]  # mean and standard deviation
         pjoin = np.random.normal(m, sd) + (self.neighbors()/100)
         pleave = np.random.normal(m, sd) + (self.neighbors()/100)
         u = np.random.uniform(0.0, 1.0)
         for site in self.cockroach.objects.sites:
-            print("ja")
             collide = pygame.sprite.collide_mask(self, site)
             if bool(collide) and pjoin > u:
                 state.joining_start()
         if state.is_joining:
             start_time = time.time()
             elapsed_time = time.time() - start_time
-            if elapsed_time >= 2:
+            if elapsed_time >= config["joining"]["time_join"]:
                 self.stop_moving()
                 state.still_start
         if state.is_still:
@@ -77,7 +76,7 @@ class Cockroach(Agent):
         # avoid any obstacles in the environment
 
         state = CockroachStateMAchine()
-        m, sd = 0.4, 0.15  # mean and standard deviation
+        m, sd = config["probability"]["m"], config["probability"]["sd"] # mean and standard deviation
         pjoin = np.random.normal(m, sd) + (self.neighbors() / 100)
         pleave = np.random.normal(m, sd) + (self.neighbors() / 100)
         u = np.random.uniform(0.0, 1.0)
@@ -90,12 +89,12 @@ class Cockroach(Agent):
         if state.is_joining:
             elapsed_time = (time.time() - start_time) * 1000
             print(elapsed_time)
-            if elapsed_time >= 0.3:
+            if elapsed_time >= config["joining"]["time_join"]:
                 self.stop_moving()
                 state.still_start
                 joined = True
         if joined:
-            print("_________________")
+            print("______________________________________________________________-")
             start_time_check = time.time()
             elapsed_time_check = (time.time() - start_time_check) * 1000
             if elapsed_time_check % 0.5 == 0 and pleave > u:
@@ -113,6 +112,7 @@ class Cockroach(Agent):
         for n in neighbors:
             n_neighbors += 1
         return n_neighbors
+
     
 
 
