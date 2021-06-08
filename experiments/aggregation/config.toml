@@ -36,3 +36,10 @@ dt        = 0.2
 mass      = 20
 max_speed = 15
 min_speed = 10
+
+[probability]
+m         = 0.4
+sd        = 0.15
+
+[joining]
+time_join = 0.3
