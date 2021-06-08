@@ -50,8 +50,10 @@ class Cockroach(Agent):
         state = CockroachStateMAchine()
         m, sd = 0.4, 0.15  # mean and standard deviation
         pjoin = np.random.normal(m, sd) + (self.neighbors()/100)
+        pleave = np.random.normal(m, sd) + (self.neighbors()/100)
         u = np.random.uniform(0.0, 1.0)
         for site in self.cockroach.objects.sites:
+            print("ja")
             collide = pygame.sprite.collide_mask(self, site)
             if bool(collide) and pjoin > u:
                 state.joining_start()
@@ -77,7 +79,9 @@ class Cockroach(Agent):
         state = CockroachStateMAchine()
         m, sd = 0.4, 0.15  # mean and standard deviation
         pjoin = np.random.normal(m, sd) + (self.neighbors() / 100)
+        pleave = np.random.normal(m, sd) + (self.neighbors() / 100)
         u = np.random.uniform(0.0, 1.0)
+        joined = None
         for site in self.cockroach.objects.sites:
             collide = pygame.sprite.collide_mask(self, site)
             if bool(collide) and pjoin > u:
@@ -89,8 +93,13 @@ class Cockroach(Agent):
             if elapsed_time >= 0.3:
                 self.stop_moving()
                 state.still_start
-        if state.is_still:
-            state.leaving_start()
+                joined = True
+        if joined:
+            print("_________________")
+            start_time_check = time.time()
+            elapsed_time_check = (time.time() - start_time_check) * 1000
+            if elapsed_time_check % 0.5 == 0 and pleave > u:
+                state.leaving_start()
         if state.is_leaving:
             state.wandering_start()
         for obstacle in self.cockroach.objects.obstacles:
@@ -104,6 +113,7 @@ class Cockroach(Agent):
         for n in neighbors:
             n_neighbors += 1
         return n_neighbors
+    
 
 
 
