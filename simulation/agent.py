@@ -1,5 +1,5 @@
 import random
-
+from experiments.aggregation.FSM import CockroachStateMAchine
 import numpy as np
 import pygame
 
@@ -53,7 +53,8 @@ class Agent(pygame.sprite.Sprite):  # super class
             width: int=None,
             height: int=None,
             dT=None,
-            index: int = None
+            index: int = None,
+
     ) -> None:
         """
         Args:
@@ -212,6 +213,7 @@ class Agent(pygame.sprite.Sprite):  # super class
             self.v + self.steering, self.max_speed, self.min_speed
         )
         self.pos += self.v * self.dT
+
 
     def display(self, screen: pygame.Surface) -> None:
         """

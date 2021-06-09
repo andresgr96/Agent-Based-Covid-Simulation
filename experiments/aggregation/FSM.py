@@ -2,9 +2,9 @@ from statemachine import StateMachine, State
 
 class CockroachStateMAchine(StateMachine):
     wandering = State('Wandering', initial=True)
-    joining = State('Join')
+    joining = State('Joininig')
     still = State('Still')
-    leaving = State('Leave')
+    leaving = State('Leaving')
 
     joining_start = wandering.to(joining)
     still_start = joining.to(still)
