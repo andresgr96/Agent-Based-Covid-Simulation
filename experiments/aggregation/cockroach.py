@@ -48,9 +48,10 @@ class Cockroach(Agent):
             return True
         else:
             return False
+
     def in_site(self):
         coord = self.pos
-        if  (210 < coord[0] < 390 and 590 > coord[1] > 410) or (610 < coord[0] < 790 and 590 > coord[1] > 410):
+        if  (210 < coord[0] < 390 and 590 > coord[1] > 410) or (610 < coord[0] < 790 and 590 > coord[1] > 410) or (410 < coord[0] < 590 and 390 > coord[1] > 210) or (410 < coord[0] < 590 and 790 > coord[1] > 610):
             return True
         else:
             return False

@@ -9,7 +9,7 @@ from typing import Tuple
 from simulation.agent import Agent
 from simulation.utils import normalize, truncate
 
-experiment = "stage2.0"
+experiment = "stage3"
 
 
 
@@ -26,11 +26,8 @@ class Aggregations(Swarm):
 
         """
         object_loc_main = config["base"]["object_location"]
-
-        self.objects.add_object(
-            file="experiments/flocking/images/redd.png", pos=object_loc_main, scale=[800, 800], obj_type="obstacle"
-        )
         if experiment == "stage2.0":
+            self.objects.add_object(file = "experiments/flocking/images/redd.png", pos = object_loc_main, scale = [800, 800], obj_type = "obstacle")
             object_loc = config["first_circle"]["object_location"]
             self.objects.add_object(
                 file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
@@ -40,19 +37,60 @@ class Aggregations(Swarm):
                 file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
             )
         elif experiment == "stage1":
+            self.objects.add_object(file="experiments/flocking/images/redd.png", pos=object_loc_main, scale=[800, 800],
+                                    obj_type="obstacle")
             object_loc = config["center_circle"]["object_location"]
             self.objects.add_object(
                 file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
             )
-        if experiment == "stage2.1":
+        elif experiment == "stage2.1":
+            self.objects.add_object(file="experiments/flocking/images/redd.png", pos=object_loc_main, scale=[800, 800],
+                                    obj_type="obstacle")
             object_loc = config["first_circle"]["object_location"]
             self.objects.add_object(
                 file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
             )
             object_loc = config["second_circle"]["object_location"]
             self.objects.add_object(
-                file="experiments/aggregation/images/greyc2.png", pos=object_loc, scale=[230, 230], obj_type="site"
+                file="experiments/aggregation/images/greyc2.png", pos=object_loc, scale=[225, 225], obj_type="site"
             )
+        elif experiment == "stage3":
+            self.objects.add_object(file="experiments/flocking/images/redd.png", pos=object_loc_main, scale=[1000, 1000],
+                                    obj_type="obstacle")
+            object_loc = config["first_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
+            )
+            object_loc = config["second_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
+            )
+            object_loc = config["upper_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
+            )
+            object_loc = config["lower_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
+            )
+        elif experiment == "stage3.1":
+            self.objects.add_object(file="experiments/flocking/images/redd.png", pos=object_loc_main, scale=[800, 800],
+                                    obj_type="obstacle")
+            object_loc = config["first_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
+            )
+            object_loc = config["second_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc1.png", pos=object_loc, scale=[200, 200], obj_type="site"
+            )
+            object_loc = config["upper_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc2.png", pos=object_loc, scale=[225, 225], obj_type="site"
+            )
+            object_loc = config["lower_circle"]["object_location"]
+            self.objects.add_object(
+                file="experiments/aggregation/images/greyc2.png", pos=object_loc, scale=[225, 225], obj_type="site")
 
 
         min_x, max_x = area(object_loc_main[0], 1000)

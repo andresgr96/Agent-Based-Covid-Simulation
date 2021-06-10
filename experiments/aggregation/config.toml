@@ -12,6 +12,12 @@ object_location  = [700, 500]
 [center_circle]
 object_location  = [500, 500]
 
+[upper_circle]
+object_location  = [500, 300]
+
+[lower_circle]
+object_location  = [500, 700]
+
 [screen]
 frames = inf
 height = 1000
