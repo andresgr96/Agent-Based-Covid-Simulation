@@ -48,6 +48,12 @@ class Cockroach(Agent):
             return True
         else:
             return False
+    def in_site(self):
+        coord = self.pos
+        if  (210 < coord[0] < 390 and 590 > coord[1] > 410) or (610 < coord[0] < 790 and 590 > coord[1] > 410):
+            return True
+        else:
+            return False
 
     def stop_moving(self) -> None:
         self.dT = 0
@@ -56,6 +62,7 @@ class Cockroach(Agent):
         self.dT = 0.2
 
     def update_actions(self) -> None:
+        print(self.pos)
         m, sd = 0.4, 0.15  # mean and standard deviation
         pjoin = np.random.normal(m, sd) + (self.neighbors() / 100)
         u = np.random.uniform(0.7, 1.0)
@@ -68,15 +75,19 @@ class Cockroach(Agent):
         if self.joining:
             self.count += 1
             print(self.count)
-            if self.count > 5:
+            if self.count > 4 and self.in_site():
                 self.joining = False
                 self.count = 0
                 self. still = True
+            elif self.in_site() != True:
+                self.joining = False
+                self.count = 0
+                self.wandering = True
         elif self.still:
             self.stop_moving()
             self.count += 1
             print("still")
-            if (self.count % 1000 == 0):
+            if (self.count % 500 == 0):
                 print(self.count)
                 print("intento")
                 if self.check_leave():
