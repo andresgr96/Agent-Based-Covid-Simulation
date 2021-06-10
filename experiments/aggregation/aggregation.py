@@ -9,7 +9,7 @@ from typing import Tuple
 from simulation.agent import Agent
 from simulation.utils import normalize, truncate
 
-experiment = "stage1"
+experiment = "stage2.0"
 
 
 
@@ -28,7 +28,7 @@ class Aggregations(Swarm):
         object_loc_main = config["base"]["object_location"]
 
         self.objects.add_object(
-            file="experiments/flocking/images/redd.png", pos=object_loc_main, scale=[1000, 1000], obj_type="obstacle"
+            file="experiments/flocking/images/redd.png", pos=object_loc_main, scale=[800, 800], obj_type="obstacle"
         )
         if experiment == "stage2.0":
             object_loc = config["first_circle"]["object_location"]

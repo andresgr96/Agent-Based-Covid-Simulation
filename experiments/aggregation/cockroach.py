@@ -36,17 +36,16 @@ class Cockroach(Agent):
         self.count = count
         self.cockroach = cockroach
         self.wandering = wandering
-        self.leaving  = leaving
+        self.leaving = leaving
         self.joining = joining
-        self.still  = still
+        self.still = still
 
     def check_leave(self):
-        m, sd = 0.4, 0.15
+        m, sd = 0.62, 0.1
         pleave = np.random.normal(m, sd) - (self.neighbors() / 100)
         u = np.random.uniform(0.1, 1.0)
-        if pleave > 0.2:
+        if pleave > 0.5:
             return True
-            print("bro")
         else:
             return False
 
@@ -59,7 +58,7 @@ class Cockroach(Agent):
     def update_actions(self) -> None:
         m, sd = 0.4, 0.15  # mean and standard deviation
         pjoin = np.random.normal(m, sd) + (self.neighbors() / 100)
-        u = np.random.uniform(0.1, 1.0)
+        u = np.random.uniform(0.7, 1.0)
         for site in self.cockroach.objects.sites:
             collide = pygame.sprite.collide_mask(self, site)
             if bool(collide) and pjoin > u and self.wandering:
@@ -69,7 +68,7 @@ class Cockroach(Agent):
         if self.joining:
             self.count += 1
             print(self.count)
-            if self.count > 50:
+            if self.count > 5:
                 self.joining = False
                 self.count = 0
                 self. still = True
@@ -77,7 +76,7 @@ class Cockroach(Agent):
             self.stop_moving()
             self.count += 1
             print("still")
-            if (self.count % 100 == 0):
+            if (self.count % 1000 == 0):
                 print(self.count)
                 print("intento")
                 if self.check_leave():
@@ -94,11 +93,12 @@ class Cockroach(Agent):
             self.count+=1
             self.keep_moving()
             #self.count =+1
-            if self.count >200:
+            if self.count >150:
                 self.leaving = False
                 self.wandering = True
         elif self.wandering:
             self.keep_moving()
+            self.count = 0
             print("wandering")
 
             ##obstacle avoidance
