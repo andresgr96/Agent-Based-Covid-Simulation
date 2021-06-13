@@ -17,13 +17,28 @@ class Population(Swarm):
             num_agents (int):
 
         """
+        min_x, max_x = area(0, 1000)
+        min_y, max_y = area(0, 1000)
+
+        # add agents to the environment
+        for index, agent in enumerate(range(num_agents)):
+            coordinates = generate_coordinates(self.screen)
+            while (
+                    coordinates[0] >= max_x
+                    or coordinates[0] <= min_x
+                    or coordinates[1] >= max_y
+                    or coordinates[1] <= min_y
+            ):
+                coordinates = generate_coordinates(self.screen)
+
+            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index))
 
         # To Do
         # code snipet (not complete) to avoid initializing agents on obstacles
         # given some coordinates and obstacles in the environment, this repositions the agent
-        coordinates = generate_coordinates(self.screen)
+        '''coordinates = generate_coordinates(self.screen)'''
 
-        if config["population"]["obstacles"]:  # you need to define this variable
+        '''if config["population"]["obstacles"]:  # you need to define this variable
             for obj in self.objects.obstacles:
                 rel_coordinate = relative(
                     coordinates, (obj.rect[0], obj.rect[1])
@@ -34,5 +49,5 @@ class Population(Swarm):
                         rel_coordinate = relative(
                             coordinates, (obj.rect[0], obj.rect[1])
                         )
-                except IndexError:
-                    pass
+                except IndexError:'''
+
