@@ -11,7 +11,7 @@ class Population(Swarm):
         super(Population, self).__init__(screen_size)
         # To do
 
-    def initialize(self, num_agents: int) -> None:
+    def initialize(self, num_agents: int, num_infected: int) -> None:
         """
         Args:
             num_agents (int):
@@ -20,6 +20,18 @@ class Population(Swarm):
         min_y, max_y = area(0, 1000)
 
         # add agents to the environment
+        for index, agent in enumerate(range(num_infected)):
+            coordinates = generate_coordinates(self.screen)
+            while (
+                    coordinates[0] >= max_x
+                    or coordinates[0] <= min_x
+                    or coordinates[1] >= max_y
+                    or coordinates[1] <= min_y
+            ):
+                coordinates = generate_coordinates(self.screen)
+
+            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index, susceptible=False, infectious=True,recovered=False))
+
         for index, agent in enumerate(range(num_agents)):
             coordinates = generate_coordinates(self.screen)
             while (
@@ -30,7 +42,7 @@ class Population(Swarm):
             ):
                 coordinates = generate_coordinates(self.screen)
 
-            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index))
+            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index, infectious = False,susceptible=True,recovered=False))
 
         # To Do
         # code snipet (not complete) to avoid initializing agents on obstacles

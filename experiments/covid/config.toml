@@ -1,6 +1,7 @@
 [base]
 swarm_type       = 'covid'
 n_agents         = 40
+n_infected         = 1
 
 [agent]
 height    = 8
@@ -14,3 +15,9 @@ min_speed = 3
 frames = inf
 height = 1000
 width  = 1000
+
+[person]
+#velocity force
+max_force         = 0.01
+#view of neighbor agents
+radius_view       = 25
