@@ -1,9 +1,12 @@
 import numpy as np
 import pygame
 
+from experiments.covid import population
 from experiments.covid.config import config
 from simulation.agent import Agent
+from simulation.swarm import Swarm
 from simulation.utils import *
+import experiments.covid.population
 
 
 class Person(Agent):
@@ -39,28 +42,20 @@ class Person(Agent):
     def inf_neighbors(self):
         neighbors = self.person.find_neighbors(self, config["person"]["radius_view"])
         for n in neighbors:
-            if n.recovered:
-                print("rec")
-            if n.susceptible:
-                print("sus")
-            if n.infectious:
-                print("inf")
             if n.infectious:
                 return True
             else:
                 return False
-
-
-
     def update_actions(self) -> None:
         if self.susceptible:
-           # print("Susceptible")
+            self.person.datapoints.append("S")
+           #print("Susceptible")
             self.image = pygame.transform.scale(self.sus, (10, 10))
             if self.inf_neighbors():
                 self.susceptible = False
                 self.infectious = True
         elif self.infectious:
-            print(self.inf_neighbors())
+            self.person.datapoints.append("I")
             self.image = pygame.transform.scale(self.inf, (10, 10))
             self.count += 1
             #print("Infected")
@@ -68,14 +63,10 @@ class Person(Agent):
                 self.infectious = False
                 self.recovered = True
         elif self.recovered:
+            self.person.datapoints.append("R")
             #print("Recovered")
             self.image = pygame.transform.scale(self.rec, (10, 10))
             self.count = 0
-
-
-
-
-
         ##obstacle avoidance
         for obstacle in self.person.objects.obstacles:
             collide = pygame.sprite.collide_mask(self, obstacle)
