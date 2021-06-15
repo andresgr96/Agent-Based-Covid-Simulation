@@ -6,7 +6,7 @@ import pygame
 
 from typing import Union, Tuple
 
-from experiments.aggregation.aggregation import Aggregations, Cockroach
+from experiments.aggregation.aggregation import Aggregations
 from experiments.covid.population import Population
 from experiments.flocking.flock import Flock
 
