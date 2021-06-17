@@ -8,18 +8,21 @@ from simulation.swarm import Swarm
 from simulation.utils import *
 import experiments.covid.population
 
-experiment = "super"
+experiment = "base"
 class Person(Agent):
     """ """
 
     def __init__(
-            self, pos, v, person, index: int, susceptible, infectious, recovered, can_leave, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
+            self, pos, v, person, index: int, susceptible, infectious, recovered, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
         inf = pygame.image.load("experiments/covid/images/inf.png"),
         rec = pygame.image.load("experiments/covid/images/cured.png"),
-        wandering = False,
-        still = True,
+        wandering_first = False,
+        wandering_sec=False,
+        still_house = True,
+        still_super=False,
         leaving = False,
         joining = False,
+        wandering = False
 
     ) -> None:
         super(Person, self).__init__(
@@ -44,20 +47,30 @@ class Person(Agent):
         self.inf = inf
         self.rec = rec
         self.wandering = wandering
+        self.wandering_first = wandering_first
+        self.wandering_sec = wandering_sec
         self.leaving = leaving
         self.joining = joining
-        self.still = still
-        self.can_leave = can_leave
+        self.still_house = still_house
+        self.still_super = still_super
 
 
     def check_leave_house(self):
         pleave = 0.2
         u = np.random.uniform(0, 1.0)
-        if pleave > u and self.can_leave:
-            print(self.can_leave)
+        if pleave > u:
             return True
         else:
             return False
+
+    def neighbors(self) -> int:
+        n_neighbors = 0
+        neighbors = self.person.find_neighbors(self, config["person"]["radius_house"])
+        for n in neighbors:
+            if n.still_house:
+                n_neighbors += 1
+        print(n_neighbors)
+        return n_neighbors
 
 
     def stop_moving(self) -> None:
@@ -66,15 +79,12 @@ class Person(Agent):
     def keep_moving(self) -> None:
         self.dT = 0.2
 
-    def in_site(self):
+    def in_site_super(self):
         coord = self.pos
-        if  (360 < coord[0] < 640 and 640 > coord[1] > 360) :
-            print("yes")
+        if  (360 < coord[0] < 640 and 640 > coord[1] > 360):
             return True
         else:
-            print("n0")
             return False
-
 
     def inf_neighbors(self):
         neighbors = self.person.find_neighbors(self, config["person"]["radius_view"])
@@ -86,6 +96,8 @@ class Person(Agent):
                 return True
             else:
                 return False
+
+
     def update_actions(self) -> None:
         if experiment == "base":
             if self.susceptible:
@@ -99,8 +111,8 @@ class Person(Agent):
                 self.person.datapoints.append("I")
                 self.image = pygame.transform.scale(self.inf, (10, 10))
                 self.countInf += 1
-                print("Infected")
-                if self.countInf > 2000:
+                #print("Infected")
+                if self.countInf > 1000:
                     self.infectious = False
                     self.recovered = True
             elif self.recovered:
@@ -113,6 +125,8 @@ class Person(Agent):
                 collide = pygame.sprite.collide_mask(self, obstacle)
                 if bool(collide):
                     self.avoid_obstacle()
+
+
         elif experiment == "super":
             if self.susceptible:
                 self.person.datapoints.append("S")
@@ -144,23 +158,22 @@ class Person(Agent):
                     self.wandering = False
                     self.joining = True
             if self.joining:
-                print("joining")
                 self.countState += 1
                 if self.countState > 100:
-                    if self.in_site():
+                    if self.in_site_super():
                         self.joining = False
                         self.countState = 0
-                        self.still = True
-                    elif self.in_site() != True:
+                        self.still_house = True
+                    elif self.in_site_super() != True:
                         self.joining = False
                         self.countState = 0
                         self.wandering = True
-            elif self.still:
+            elif self.still_house:
                 self.stop_moving()
                 self.countState += 1
                 if (self.countState % 500 == 0):
                     if self.check_leave_house():
-                        self.still = False
+                        self.still_house = False
                         self.leaving = True
                         self.countState = 0
                     else:
@@ -174,6 +187,70 @@ class Person(Agent):
             elif self.wandering:
                 self.keep_moving()
                 self.countState = 0
+
+
+        elif experiment == "super_lock":
+            if self.susceptible:
+                self.person.datapoints.append("S")
+                # print("Susceptible")
+                self.image = pygame.transform.scale(self.sus, (10, 10))
+                if self.inf_neighbors():
+                    self.susceptible = False
+                    self.infectious = True
+            elif self.infectious:
+                self.person.datapoints.append("I")
+                self.image = pygame.transform.scale(self.inf, (10, 10))
+                self.countInf += 1
+                # print("Infected")
+                if self.countInf > 1000:
+                    self.infectious = False
+                    self.recovered = True
+            elif self.recovered:
+                self.person.datapoints.append("R")
+                # print("Recovered")
+                self.image = pygame.transform.scale(self.rec, (10, 10))
+                self.countInf = 0
+
+            ##Novement states
+            pjoin = 0.8
+            u = np.random.uniform(0.1, 1.0)
+            for site in self.person.objects.sites:
+                collide = pygame.sprite.collide_mask(self, site)
+                if bool(collide) and pjoin > u and self.wandering_first:
+                    self.wandering_first = False
+                    self.joining = True
+            if self.joining:
+                print("joining")
+                self.countState += 1
+                if self.countState > 100:
+                    if self.in_site_super():
+                        self.joining = False
+                        self.countState = 0
+                        self.still_house = True
+                    elif self.in_site_super() != True:
+                        self.joining = False
+                        self.countState = 0
+                        self.wandering_first = True
+            elif self.still_house:
+                self.stop_moving()
+                self.countState += 1
+                if (self.countState % 200 == 0):
+                    if self.check_leave_house() and self.neighbors() > 3:
+                        self.still_house = False
+                        self.leaving = True
+                        self.countState = 0
+                    else:
+                        self.countState = 0
+            elif self.leaving:
+                self.countState += 1
+                self.keep_moving()
+                if self.countState > 150:
+                    self.leaving = False
+                    self.wandering_first = True
+            elif self.wandering_first:
+                self.keep_moving()
+                self.countState = 0
+
 
 
 
