@@ -63,6 +63,23 @@ class Person(Agent):
         else:
             return False
 
+    def check_infected(self):
+        pinf = 0.5
+        u = np.random.uniform(0, 1.0)
+        if pinf > u:
+            return True
+        else:
+            return False
+
+
+    def check_mask(self):
+        pinf = 0.8
+        u = np.random.uniform(0, 1.0)
+        if pinf > u:
+            return True
+        else:
+            return False
+
     def neighbors(self) -> int:
         n_neighbors = 0
         neighbors = self.person.find_neighbors(self, config["person"]["radius_house"])
@@ -101,7 +118,33 @@ class Person(Agent):
                 self.person.datapoints.append("S")
                #print("Susceptible")
                 self.image = pygame.transform.scale(self.sus, (10, 10))
-                if self.inf_neighbors():
+                if self.inf_neighbors() and self.check_infected():
+                    self.susceptible = False
+                    self.infectious = True
+            elif self.infectious:
+                self.person.datapoints.append("I")
+                self.image = pygame.transform.scale(self.inf, (10, 10))
+                self.countInf += 1
+                #print("Infected")
+                if self.countInf > 1000:
+                    self.infectious = False
+                    self.recovered = True
+            elif self.recovered:
+                self.person.datapoints.append("R")
+                #print("Recovered")
+                self.image = pygame.transform.scale(self.rec, (10, 10))
+                self.countInf = 0
+            ##obstacle avoidance
+            for obstacle in self.person.objects.obstacles:
+                collide = pygame.sprite.collide_mask(self, obstacle)
+                if bool(collide):
+                    self.avoid_obstacle()
+        elif experiment == "base_mask":
+            if self.susceptible:
+                self.person.datapoints.append("S")
+               #print("Susceptible")
+                self.image = pygame.transform.scale(self.sus, (10, 10))
+                if self.inf_neighbors() and self.check_mask():
                     self.susceptible = False
                     self.infectious = True
             elif self.infectious:
@@ -129,7 +172,7 @@ class Person(Agent):
                 self.person.datapoints.append("S")
                #print("Susceptible")
                 self.image = pygame.transform.scale(self.sus, (10, 10))
-                if self.inf_neighbors():
+                if self.inf_neighbors() and self.check_infected():
                     self.susceptible = False
                     self.infectious = True
             elif self.infectious:
@@ -191,7 +234,7 @@ class Person(Agent):
                 self.person.datapoints.append("S")
                 # print("Susceptible")
                 self.image = pygame.transform.scale(self.sus, (10, 10))
-                if self.inf_neighbors():
+                if self.inf_neighbors() and self.check_mask():
                     self.susceptible = False
                     self.infectious = True
             elif self.infectious:
