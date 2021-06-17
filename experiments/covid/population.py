@@ -5,7 +5,7 @@ from simulation.swarm import Swarm
 from simulation.utils import *
 import random
 
-experiment = "super_lock"
+experiment = "super"
 
 class Population(Swarm):
     """Class that represents the Population for the Covid experiment. TODO"""

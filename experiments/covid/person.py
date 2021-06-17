@@ -8,7 +8,7 @@ from simulation.swarm import Swarm
 from simulation.utils import *
 import experiments.covid.population
 
-experiment = "super_lock"
+experiment = "super"
 class Person(Agent):
     """ """
 
