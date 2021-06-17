@@ -59,7 +59,6 @@ class Simulation:
 
     def __init__(
             self,
-            num_infected: int,
             num_agents: int,
             screen_size: Union[Tuple[int, int], int],
             swarm_type: str,
@@ -81,7 +80,6 @@ class Simulation:
 
         # swarm settings
         self.num_agents = num_agents
-        self.num_infected = num_infected
         if self.swarm_type == "flock":
             self.swarm = Flock(screen_size)
 
@@ -117,7 +115,7 @@ class Simulation:
         """Initialize the swarm, specifying the number of agents to be generated"""
 
         # initialize a swarm type specific environment
-        self.swarm.initialize(self.num_agents, self.num_infected)
+        self.swarm.initialize(self.num_agents)
 
     def simulate(self) -> None:
         """Here each frame is computed and displayed"""

@@ -11,7 +11,7 @@ Code for multi-agent simulation in PyGame with/without physical objects in the e
 
 if __name__ == "__main__":
     pygame.init()
-    sim = Simulation(num_infected=config["base"]["n_infected"],num_agents=config["base"]["n_agents"],
+    sim = Simulation(num_agents=config["base"]["n_agents"],
                      screen_size=(config["screen"]["width"], config["screen"]["height"]),
                      swarm_type=config["base"]["swarm_type"], iterations=config["screen"]["frames"])
     sim.run()

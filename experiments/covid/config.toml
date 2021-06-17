@@ -1,7 +1,7 @@
 [base]
 swarm_type       = "covid"
-n_agents         = 40
-n_infected         = 3
+n_agents         = 80
+n_infected         = 0
 
 [agent]
 height    = 8
@@ -12,7 +12,7 @@ max_speed = 6
 min_speed = 6
 
 [screen]
-frames = 3000
+frames = 4500
 height = 1000
 width  = 1000
 
@@ -20,4 +20,5 @@ width  = 1000
 #velocity force
 max_force         = 0.01
 #view of neighbor agents
-radius_view       = 30
+radius_view       = 44
+radius_house       = 50

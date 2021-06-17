@@ -19,7 +19,8 @@ class Pacient(Agent):
         wandering = False,
         still = True,
         leaving = False,
-        joining = False
+        joining = False,
+        still_house = False
 
     ) -> None:
         super(Pacient, self).__init__(
@@ -46,6 +47,7 @@ class Pacient(Agent):
         self.wandering = wandering
         self.leaving = leaving
         self.joining = joining
+        self.still_house = still_house
         self.still = still
 
     def update_actions(self) -> None:
