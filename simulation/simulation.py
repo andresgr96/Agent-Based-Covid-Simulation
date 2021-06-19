@@ -11,15 +11,14 @@ from experiments.covid.population import Population
 from experiments.flocking.flock import Flock
 
 
+
 def _plot_covid(data) -> None:
     """
     Plot the data related to the covid experiment. The plot is based on the number of Susceptible,
     Infected and Recovered agents
-
     Args:
     ----
         data:
-
     """
     output_name = "experiments/covid/plots/Covid-19-SIR%s.png" % time.strftime(
         "-%m.%d.%y-%H:%M", time.localtime()
@@ -28,6 +27,7 @@ def _plot_covid(data) -> None:
     plt.plot(data["S"], label="Susceptible", color=(1, 0.5, 0))  # Orange
     plt.plot(data["I"], label="Infected", color=(1, 0, 0))  # Red
     plt.plot(data["R"], label="Recovered", color=(0, 1, 0))  # Green
+    plt.axhline(y=40, label = "Hospital Overload", color='black', linestyle='--')
     plt.title("Covid-19 Simulation S-I-R")
     plt.xlabel("Time")
     plt.ylabel("Population")
@@ -98,14 +98,16 @@ class Simulation:
         self.running = True
 
     def plot_simulation(self) -> None:
+        print("bro")
+        print(self.swarm.points_to_plot)
         """Depending on the type of experiment, plots the final data accordingly"""
-        if self.swarm_type == "Covid":
+        if self.swarm_type == "covid":
             _plot_covid(self.swarm.points_to_plot)
 
-        elif self.swarm_type == "Flock":
+        elif self.swarm_type == "flock":
             _plot_flock()
 
-        elif self.swarm_type == "Aggregation":
+        elif self.swarm_type == "aggregation":
             _plot_aggregation()
 
     def initialize(self) -> None:
@@ -135,6 +137,7 @@ class Simulation:
         """
         # initialize the environment and agent/obstacle positions
         self.initialize()
+
         # the simulation loop, infinite until the user exists the simulation
         # finite time parameter or infinite
 
@@ -143,7 +146,7 @@ class Simulation:
             while self.running:
                 init = time.time()
                 self.simulate()
-                print(time.time() - init)
+
 
             self.plot_simulation()
         else:
