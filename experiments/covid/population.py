@@ -52,13 +52,7 @@ class Population(Swarm):
         self.objects.add_object(file="experiments/covid/images/88226-200.png", pos=[150, 700], scale=[100, 200],
                                 obj_type="obstacle")
 
-        self.objects.add_object(file="experiments/covid/images/88226-200.png", pos=[250, 700], scale=[100, 200],
-                                obj_type="obstacle")
-
         self.objects.add_object(file="experiments/covid/images/88226-200.png", pos=[350, 700], scale=[100, 200],
-                                obj_type="obstacle")
-
-        self.objects.add_object(file="experiments/covid/images/88226-200.png", pos=[450, 700], scale=[100, 200],
                                 obj_type="obstacle")
 
         self.objects.add_object(file="experiments/covid/images/88226-200.png", pos=[550, 900], scale=[100, 650],
@@ -90,7 +84,7 @@ class Population(Swarm):
                     or coordinates[1] <= min_y
             ):
                 coordinates = generate_coordinates(self.screen)
-            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index, susceptible=False, infectious=True,recovered=False))
+            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index, susceptible=False, infectious=True,recovered=False, incubation=False))
 
         for index, agent in enumerate(range(num_agents)):
             coordinates = generate_coordinates(self.screen)
@@ -102,5 +96,4 @@ class Population(Swarm):
             ):
                 coordinates = generate_coordinates(self.screen)
             print(coordinates)
-            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index, infectious = False,susceptible=True,recovered=False))
-
+            self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index, infectious = False,susceptible=True,recovered=False, incubation=False))
