@@ -176,3 +176,13 @@ def relative(u: Union[np.ndarray, List[Union[float, int]]], v: Union[np.ndarray,
 
     """
     return [int(u[i]) - int(v[i]) for i in range(len(u))]
+
+
+def relative(u: Union[np.ndarray, List[Union[float, int]]], v: Union[np.ndarray, List[Union[float, int]]]) -> List[int]:
+    """
+    Args:
+        u (Union[np.ndarray, List[Union[float, int]]]):
+        v (Union[np.ndarray, List[Union[float, int]]]):
+
+    """
+    return [int(u[i]) - int(v[i]) for i in range(len(u))]
