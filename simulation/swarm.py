@@ -14,7 +14,6 @@ class Swarm(pygame.sprite.Sprite):
     Base class for the swarm of agents simulation. This class will contain the total amount of agents and obstacles
     which are present in the simulation. It will also handle the update and display of each element (agent or obstacle)
     for each frame of the GUI, as it extends the base class pygame.sprite.Sprite
-
     Attributes:
     ----------
          dist_temp:
@@ -23,10 +22,9 @@ class Swarm(pygame.sprite.Sprite):
          objects:
          points_to_plot:
          datapoints:
-
     """
 
-    def __init__(self, screen_size, plot=None) -> None:
+    def __init__(self, screen_size, plot: dict = {"S": [], "I": [], "R": []}) -> None:
         """
         Args:
         ----
@@ -44,11 +42,9 @@ class Swarm(pygame.sprite.Sprite):
     def add_agent(self, agent: Agent) -> None:
         """
         Adds an agent to the pool of agents in the swarm
-
         Args:
         ----
             agent (Agent):
-
         """
         self.agents.append(agent)
 
@@ -57,12 +53,10 @@ class Swarm(pygame.sprite.Sprite):
         This method computes the euclidean distance between the considered agent and another agent of the swarm, and
         saves the result in a temporary dictionary, so the inverse (i.e. distance a-b is the same as distance b-a) does
         not need to be recomputed for this frame.
-
         Args:
         ----
             a (Agent): Agent in question that is performing the check of its surroundings
             b (Agent): Another of the swarm
-
         """
         indexes = (a.index, b.index)
         pair = (min(indexes), max(indexes))
@@ -75,12 +69,10 @@ class Swarm(pygame.sprite.Sprite):
         """
         Try to locate all the neighbors of the given agent, considering a specified radius, by computing the euclidean
         distance between the agent and any other member of the swarm
-
         Args:
         ----
             agent (Agent):
             radius (float):
-
         """
         #  Check that the each other agent is not our considered one, if the type is None or infected, and the distance
         return [neighbor for neighbor in self.agents if
@@ -106,11 +98,9 @@ class Swarm(pygame.sprite.Sprite):
     def add_point(self, lst) -> None:
         """
         Plots the number of infected and recovered
-
         Args:
         ----
             lst:
-
         """
         # Count current numbers
         values = {"S": 0, "I": 0, "R": 0}
@@ -138,11 +128,9 @@ class Swarm(pygame.sprite.Sprite):
         """
         Display the updated agents and objects for the next frame, and reset the temporary dictionary for finding
         the neighbors
-
         Args:
         ----
             screen (pygame.Surface):
-
         """
         for obstacle in self.objects.obstacles:
             obstacle.display(screen)
