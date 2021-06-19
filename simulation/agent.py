@@ -1,5 +1,5 @@
 import random
-
+from experiments.aggregation.FSM import CockroachStateMAchine
 import numpy as np
 import pygame
 
@@ -19,7 +19,6 @@ class Agent(pygame.sprite.Sprite):  # super class
     well as the possibility of rotating the image on the GUI, set the agent to wander, avoid an obstacle and set its
     velocity. Finally, here reside the update and display function, for visualizing the next frame on the GUI, as it extends
     the class pygame.sprite.Sprite
-
     Attributes:
     ----------
         index:
@@ -53,7 +52,8 @@ class Agent(pygame.sprite.Sprite):  # super class
             width: int=None,
             height: int=None,
             dT=None,
-            index: int = None
+            index: int = None,
+
     ) -> None:
         """
         Args:
@@ -112,11 +112,9 @@ class Agent(pygame.sprite.Sprite):  # super class
     def pos(self, pos) -> None:
         """
         Position setter for the current instance of Agent
-
         Args:
         ---------
             pos:
-
         """
         self._pos = pos
         self.rect.center = tuple(
@@ -132,11 +130,9 @@ class Agent(pygame.sprite.Sprite):  # super class
     def v(self, v: np.ndarray) -> None:
         """
         Velocity setter for the current instance of Agent
-
         Args:
         ---------
             v (np.ndarray):
-
         """
         self._v = v
         if self.image_file:
@@ -174,7 +170,6 @@ class Agent(pygame.sprite.Sprite):  # super class
         """
         Function to make the agents perform random movement (wandering_angle) based on the wander angle, and with a
         (returned) wander force, based on the previous velocity, the wander distance and wander radius.
-
         Args:
         ---------
             wander_dist:
@@ -213,14 +208,13 @@ class Agent(pygame.sprite.Sprite):  # super class
         )
         self.pos += self.v * self.dT
 
+
     def display(self, screen: pygame.Surface) -> None:
         """
         Refresh the updated agent on the GUI for the next frame.
-
         Args:
         ------
             screen (pygame.Surface):
-
         """
         screen.blit(self.image, self.rect)
 
