@@ -13,7 +13,7 @@ class Person(Agent):
     """ """
 
     def __init__(
-            self, pos, v, person, index: int, susceptible, infectious, recovered, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
+            self, pos, v, person, index: int,age:int, weight:int,morbid, susceptible, infectious, recovered, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
         inf = pygame.image.load("experiments/covid/images/inf.png"),
         rec = pygame.image.load("experiments/covid/images/cured.png"),
         wandering_first = False,
@@ -46,6 +46,10 @@ class Person(Agent):
         self.sus = sus
         self.inf = inf
         self.rec = rec
+        self.age = age
+        self.weight = weight
+        self.morbid = morbid
+
         self.wandering = wandering
         self.wandering_first = wandering_first
         self.wandering_sec = wandering_sec
