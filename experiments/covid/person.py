@@ -303,6 +303,7 @@ class Person(Agent):
                 self.image = pygame.transform.scale(self.rec, (10, 10))
                 self.countInf = 0
             elif self.dead:
+                self.person.datapoints.append("D")
                 self.wandering = False
                 self.still_house = False
                 self.joining = False
