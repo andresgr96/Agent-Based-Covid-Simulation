@@ -31,7 +31,7 @@ def _plot_covid(data) -> None:
     plt.plot(data["R"], label="Recovered", color=(0, 1, 0))  # Green
     # plt.plot(data["D"], label="Dead", color=(0, 0, 0))  # Black
     plt.plot(data["H"], label="Hospitalized", color="brown")  # Green
-    plt.axhline(y=0.92, label="Hospital Overload", color='black', linestyle='--')
+    plt.axhline(y=1.5, label="Hospital Overload", color='black', linestyle='--')
     plt.title("Covid-19 Simulation")
     plt.xlabel("Time, 1000 = 2 Weeks")
     plt.ylabel("Population")
@@ -171,11 +171,11 @@ class Simulation:
     def plot_simulation(self) -> None:
         """Depending on the type of experiment, plots the final data accordingly"""
         if self.swarm_type == "covid":
-            # _plot_covid(self.swarm.points_to_plot)
+             _plot_covid(self.swarm.points_to_plot)
             # _plot_weight(self.swarm.h_weight_plot)
             # _plot_sex(self.swarm.h_sex_plot)
             # _plot_morb(self.swarm.h_morb_plot)
-            _plot_age(self.swarm.h_age_plot)
+            #_plot_age(self.swarm.h_age_plot)
 
 
         elif self.swarm_type == "flock":

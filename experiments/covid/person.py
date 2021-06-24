@@ -9,7 +9,7 @@ from simulation.swarm import Swarm
 from simulation.utils import *
 import experiments.covid.population
 
-experiment = "super_death"
+experiment = "super_lock_death"
 class Person(Agent):
     """ """
 
@@ -109,13 +109,13 @@ class Person(Agent):
         if self.age < 20:
             age_prob = -0.1
         elif 29 > self.age >= 20:
-            age_prob = 0.003
+            age_prob = 0.002
         elif 39 > self.age >= 30:
-            age_prob = 0.004
+            age_prob = 0.003
         elif 49 > self.age >= 40:
-            age_prob = 0.007
+            age_prob = 0.005
         elif 59 > self.age >= 50:
-            age_prob = 0.022
+            age_prob = 0.020
         elif 69 > self.age >= 60:
             age_prob = 0.06
         elif 79 > self.age >= 70:
