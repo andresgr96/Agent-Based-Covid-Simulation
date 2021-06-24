@@ -13,10 +13,11 @@ class Person(Agent):
     """ """
 
     def __init__(
-            self, pos, v, person, index: int,age:int, weight,sex ,morbid, susceptible, infectious, recovered,dead = False, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
+            self, pos, v, person, index: int,age:int, weight,sex ,morbid, susceptible, infectious, recovered,dead = False,hospitalized = False, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
         inf = pygame.image.load("experiments/covid/images/inf.png"),
         rec = pygame.image.load("experiments/covid/images/cured.png"),
         death = pygame.image.load("experiments/covid/images/dead.png"),
+        hosp=pygame.image.load("experiments/covid/images/hosp.png"),
         wandering_first = False,
         wandering_sec=False,
         still_house = True,
@@ -46,6 +47,7 @@ class Person(Agent):
         self.recovered = recovered
         self.sus = sus
         self.death = death
+        self.hospitalized = hospitalized
         self.dead = dead
         self.inf = inf
         self.rec = rec
@@ -53,6 +55,7 @@ class Person(Agent):
         self.weight = weight
         self.morbid = morbid
         self.sex = sex
+        self.hosp = hosp
 
         self.wandering = wandering
         self.wandering_first = wandering_first
@@ -96,6 +99,49 @@ class Person(Agent):
                 n_neighbors += 1
         print(n_neighbors)
         return n_neighbors
+
+    def check_hosp(self):
+        age_prob = 0
+        w_prob = 0
+        mor_prob = 0
+        sex_prob = 0
+        if self.age < 20:
+            age_prob = 0
+        elif 29 > self.age >= 20:
+            age_prob = 0.004
+        elif 39 > self.age >= 30:
+            age_prob = 0.0048
+        elif 49 > self.age >= 40:
+            age_prob = 0.008
+        elif 59 > self.age >= 50:
+            age_prob = 0.02
+        elif 69 > self.age >= 60:
+            age_prob = 0.066
+        elif 79 > self.age >= 70:
+            age_prob = 0.16
+        elif self.age >= 80:
+            age_prob = 0.32
+        if self.morbid:
+            mor_prob = 0.16
+        elif not self.morbid:
+            mor_prob = 0
+        if self.weight == "under":
+            w_prob = 0.02
+        elif self.weight == "normal":
+            w_prob = 0
+        elif self.weight == "over":
+            w_prob = 0.12
+        elif self.weight == "obese":
+            w_prob = 0.24
+        if self.sex == "male":
+            sex_prob = 0.15
+        u = random.uniform(0, 1)
+        prob = age_prob + mor_prob + w_prob + sex_prob
+        if prob > u:
+            return True
+        else:
+            return False
+
 
 
     def stop_moving(self) -> None:
@@ -157,9 +203,12 @@ class Person(Agent):
         u = random.uniform(0,1)
         prob = age_prob + mor_prob + w_prob + sex_prob
         if prob > u:
+            print("yes")
             return True
         else:
+            print("no")
             return False
+
     def update_actions(self) -> None:
         if experiment == "base":
             if self.susceptible:
@@ -289,12 +338,24 @@ class Person(Agent):
                 self.image = pygame.transform.scale(self.inf, (10, 10))
                 self.countInf += 1
                 if self.countInf == 300 or self.countInf == 900:
-                    if self.check_death():
+                    if self.check_hosp():
                         self.infectious = False
-                        self.dead = True
+                        self.hospitalized = True
                         self.countInf = 0
                 if self.countInf > 1000:
                     self.infectious = False
+                    self.recovered = True
+            elif self.hospitalized:
+                self.stop_moving()
+                self.image = pygame.transform.scale(self.hosp, (10, 10))
+                self.countInf += 1
+                if self.countInf == 300 or self.countInf == 900:
+                    if self.check_death():
+                        self.hospitalized = False
+                        self.dead = True
+                        self.countInf = 0
+                if self.countInf > 1000:
+                    self.hospitalized = False
                     self.recovered = True
             elif self.recovered:
                 self.person.datapoints.append("R")
@@ -427,12 +488,24 @@ class Person(Agent):
                 self.image = pygame.transform.scale(self.inf, (10, 10))
                 self.countInf += 1
                 if self.countInf == 300 or self.countInf == 900:
+                    if self.check_hosp():
+                        self.infectious = False
+                        self.hospitalized = True
+                        self.countInf = 0
+                if self.countInf > 1000:
+                    self.infectious = False
+                    self.recovered = True
+            elif self.hospitalized:
+                self.image = pygame.transform.scale(self.hosp, (10, 10))
+                self.stop_moving()
+                self.countInf += 1
+                if self.countInf == 300 or self.countInf == 900:
                     if self.check_death():
                         self.infectious = False
                         self.dead = True
                         self.countInf = 0
                 if self.countInf > 1000:
-                    self.infectious = False
+                    self.hospitalized = False
                     self.recovered = True
             elif self.recovered:
                 self.person.datapoints.append("R")
@@ -440,8 +513,14 @@ class Person(Agent):
                 self.image = pygame.transform.scale(self.rec, (10, 10))
                 self.countInf = 0
             elif self.dead:
+                self.person.datapoints.append("D")
+                self.wandering = False
+                self.still_house = False
+                self.joining = False
+                self.leaving = False
                 self.stop_moving()
                 self.image = pygame.transform.scale(self.death, (10, 10))
+                print(self.morbid, self.weight, self.sex)
 
             ##Novement states
             pjoin = 0.8
