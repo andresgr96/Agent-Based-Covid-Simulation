@@ -13,7 +13,7 @@ class Person(Agent):
     """ """
 
     def __init__(
-            self, pos, v, person, index: int,age:int, weight:int,morbid, susceptible, infectious, recovered,dead = False, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
+            self, pos, v, person, index: int,age:int, weight,sex ,morbid, susceptible, infectious, recovered,dead = False, image: str = "experiments/covid/images/sus.png", countInf = 0,countState = 0,sus = pygame.image.load("experiments/covid/images/sus.png"),
         inf = pygame.image.load("experiments/covid/images/inf.png"),
         rec = pygame.image.load("experiments/covid/images/cured.png"),
         death = pygame.image.load("experiments/covid/images/dead.png"),
@@ -52,6 +52,7 @@ class Person(Agent):
         self.age = age
         self.weight = weight
         self.morbid = morbid
+        self.sex = sex
 
         self.wandering = wandering
         self.wandering_first = wandering_first
@@ -122,6 +123,7 @@ class Person(Agent):
         age_prob = 0
         w_prob = 0
         mor_prob = 0
+        sex_prob = 0
         if self.age < 20:
             age_prob = 0
         elif 29 > self.age >=20:
@@ -150,17 +152,14 @@ class Person(Agent):
             w_prob = 0.06
         elif self.weight == "obese":
             w_prob = 0.12
+        if self.sex == "male":
+            sex_prob = 0.15
         u = random.uniform(0,1)
-        prob = age_prob + mor_prob + w_prob
+        prob = age_prob + mor_prob + w_prob + sex_prob
         if prob > u:
             return True
         else:
             return False
-
-
-
-
-
     def update_actions(self) -> None:
         if experiment == "base":
             if self.susceptible:
@@ -310,7 +309,7 @@ class Person(Agent):
                 self.leaving = False
                 self.stop_moving()
                 self.image = pygame.transform.scale(self.death, (10, 10))
-                print(self.morbid, self.weight)
+                print(self.morbid, self.weight, self.sex)
 
             ##Novement states
             pjoin = 0.8

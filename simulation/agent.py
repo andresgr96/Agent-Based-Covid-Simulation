@@ -1,5 +1,4 @@
 import random
-from experiments.aggregation.FSM import CockroachStateMAchine
 import numpy as np
 import pygame
 

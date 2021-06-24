@@ -3,13 +3,12 @@ import pygame
 import time
 from typing import Tuple
 from datetime import timedelta
-from timeloop import Timeloop
+
 from simulation.agent import Agent
 from simulation.utils import normalize, truncate
 from experiments.aggregation.config import config
-from experiments.aggregation.FSM import CockroachStateMAchine
-import schedule
-import timeloop
+
+
 
 """
 Specific ant properties and helperfunctions 

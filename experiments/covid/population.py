@@ -29,9 +29,19 @@ class Population(Swarm):
             age = random.randint(16, 65)
         return age
 
+    def sex(self):
+        prob = 0.52
+        sex = "female"
+        u = random.uniform(0, 1)
+        if u <= prob:
+            sex = "female"
+        elif u > prob:
+            sex = "male"
+        return sex
+
     def morb(self, age):
         if age < 20:
-            prob = 0.03
+            prob = 0.015
         elif 45 > age >= 20:
             prob = 0.05
         elif 55 > age >= 45:
@@ -97,9 +107,10 @@ class Population(Swarm):
                 age = self.age()
                 weight = self.weight()
                 morb = self.morb(age)
+                sex = self.sex()
 
                 self.add_agent(Person(pos=np.array(coordinates), v=None, person=self, index=index, infectious=False,
-                                      susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                      susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
 
         elif experiment == "super":
             # Horizontal row upper
@@ -206,9 +217,10 @@ class Population(Swarm):
                 age = self.age()
                 weight = self.weight()
                 morb = self.morb(age)
+                sex = self.sex()
 
                 self.add_agent(Person(pos=np.array(random_room), v=None, person=self, index=index, infectious=False,
-                                      susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                      susceptible=True, recovered=False, age=age, sex = sex, weight=weight, morbid=morb))
 
         elif experiment == "super_lock":
             # Horizontal row upper
@@ -298,102 +310,103 @@ class Population(Swarm):
                 age = self.age()
                 weight = self.weight()
                 morb = self.morb(age)
+                sex = self.sex()
                 if index < 5:
                     room = rooms[0]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 5 <= index < 10:
                     room = rooms[1]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 10 <= index < 15:
                     room = rooms[2]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 15 <= index < 20:
                     room = rooms[3]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 20 <= index < 25:
                     room = rooms[4]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 25 <= index < 30:
                     room = rooms[5]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 30 <= index < 35:
                     room = rooms[6]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 35 <= index < 40:
                     room = rooms[7]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 40 <= index < 45:
                     room = rooms[8]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 45 <= index < 50:
                     room = rooms[9]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 50 <= index < 55:
                     room = rooms[10]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 55 <= index < 60:
                     room = rooms[11]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 60 <= index < 65:
                     room = rooms[12]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 65 <= index < 70:
                     room = rooms[13]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 70 <= index < 75:
                     room = rooms[14]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
                 if 75 <= index < 80:
                     room = rooms[15]
                     room[0] += np.random.uniform(0, 10)
                     room[1] += np.random.uniform(0, 10)
                     self.add_agent(Person(pos=np.array(room), v=None, person=self, index=index, infectious=False,
-                                          susceptible=True, recovered=False, age=age, weight=weight, morbid=morb))
+                                          susceptible=True, recovered=False, age=age,sex = sex, weight=weight, morbid=morb))
 
             # for room in rooms:
             #     i = 0

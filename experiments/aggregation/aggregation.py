@@ -1,4 +1,4 @@
-from experiments.aggregation.FSM import CockroachStateMAchine
+
 from experiments.aggregation.cockroach import Cockroach
 from experiments.aggregation.config import config
 from simulation.utils import *
