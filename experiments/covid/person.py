@@ -3,6 +3,7 @@ import pygame
 
 from experiments.covid import population
 from experiments.covid.config import config
+from experiments.covid.Plotting import Plotting
 from simulation.agent import Agent
 from simulation.swarm import Swarm
 from simulation.utils import *
@@ -106,33 +107,33 @@ class Person(Agent):
         mor_prob = 0
         sex_prob = 0
         if self.age < 20:
-            age_prob = 0
+            age_prob = -0.1
         elif 29 > self.age >= 20:
-            age_prob = 0.004
+            age_prob = 0.003
         elif 39 > self.age >= 30:
-            age_prob = 0.0048
+            age_prob = 0.004
         elif 49 > self.age >= 40:
-            age_prob = 0.008
+            age_prob = 0.007
         elif 59 > self.age >= 50:
-            age_prob = 0.02
+            age_prob = 0.022
         elif 69 > self.age >= 60:
-            age_prob = 0.066
+            age_prob = 0.06
         elif 79 > self.age >= 70:
             age_prob = 0.16
         elif self.age >= 80:
-            age_prob = 0.32
+            age_prob = 0.30
         if self.morbid:
-            mor_prob = 0.16
+            mor_prob = 0.14
         elif not self.morbid:
             mor_prob = 0
         if self.weight == "under":
             w_prob = 0.02
-        elif self.weight == "normal":
-            w_prob = 0
+        elif self.weight == "healthy":
+            w_prob = -0.1
         elif self.weight == "over":
-            w_prob = 0.12
+            w_prob = 0.16
         elif self.weight == "obese":
-            w_prob = 0.24
+            w_prob = 0.35
         if self.sex == "male":
             sex_prob = 0.15
         u = random.uniform(0, 1)
@@ -171,13 +172,13 @@ class Person(Agent):
         mor_prob = 0
         sex_prob = 0
         if self.age < 20:
-            age_prob = 0
+            age_prob = -0.1
         elif 29 > self.age >=20:
             age_prob = 0.002
         elif 39 > self.age >=30:
-            age_prob = 0.0028
+            age_prob = 0.0022
         elif 49 > self.age >=40:
-            age_prob = 0.004
+            age_prob = 0.0033
         elif 59 > self.age >=50:
             age_prob = 0.01
         elif 69 > self.age >=60:
@@ -192,7 +193,7 @@ class Person(Agent):
             mor_prob = 0
         if self.weight == "under":
             w_prob = 0.01
-        elif self.weight == "normal":
+        elif self.weight == "healthy":
             w_prob = 0
         elif self.weight == "over":
             w_prob = 0.06
@@ -347,6 +348,7 @@ class Person(Agent):
                     self.recovered = True
             elif self.hospitalized:
                 self.stop_moving()
+                self.person.datapoints.append("H")
                 self.image = pygame.transform.scale(self.hosp, (10, 10))
                 self.countInf += 1
                 if self.countInf == 300 or self.countInf == 900:
@@ -363,6 +365,30 @@ class Person(Agent):
                 self.image = pygame.transform.scale(self.rec, (10, 10))
                 self.countInf = 0
             elif self.dead:
+                if self.morbid:
+                    self.person.h_morb.append("T")
+                elif not self.morbid:
+                    self.person.h_morb.append("F")
+                if self.age <= 15:
+                    self.person.h_age.append("1-25")
+                elif 45> self.age > 25:
+                    self.person.h_age.append("25-45")
+                elif 65> self.age > 45:
+                    self.person.h_age.append("45-65")
+                elif self.age >= 65:
+                    self.person.h_age.append("65+")
+                if self.weight == "under":
+                    self.person.h_weight.append("U")
+                elif self.weight == "over":
+                    self.person.h_weight.append("O")
+                elif self.weight == "healthy":
+                    self.person.h_weight.append("H")
+                elif self.weight == "obese":
+                    self.person.h_weight.append("OB")
+                if self.sex == "male":
+                    self.person.h_sex.append("M")
+                elif self.sex == "female":
+                    self.person.h_sex.append("F")
                 self.person.datapoints.append("D")
                 self.wandering = False
                 self.still_house = False
@@ -370,7 +396,6 @@ class Person(Agent):
                 self.leaving = False
                 self.stop_moving()
                 self.image = pygame.transform.scale(self.death, (10, 10))
-                print(self.morbid, self.weight, self.sex)
 
             ##Novement states
             pjoin = 0.8
@@ -410,8 +435,6 @@ class Person(Agent):
             elif self.wandering:
                 self.keep_moving()
                 self.countState = 0
-
-
 
         elif experiment == "super_lock":
             if self.susceptible:
@@ -496,12 +519,13 @@ class Person(Agent):
                     self.infectious = False
                     self.recovered = True
             elif self.hospitalized:
+                self.person.datapoints.append("H")
                 self.image = pygame.transform.scale(self.hosp, (10, 10))
                 self.stop_moving()
                 self.countInf += 1
                 if self.countInf == 300 or self.countInf == 900:
                     if self.check_death():
-                        self.infectious = False
+                        self.hospitalized = False
                         self.dead = True
                         self.countInf = 0
                 if self.countInf > 1000:

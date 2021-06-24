@@ -26,7 +26,10 @@ class Swarm(pygame.sprite.Sprite):
 
     """
 
-    def __init__(self, screen_size, plot: dict = {"S": [], "I": [], "R": [], "D": []}) -> None:
+    def __init__(self, screen_size, plot: dict = {"S": [], "I": [], "R": [], "D": [], "H":[]}, h_weight: dict = {"U": [], "H": [], "O": [], "OB": []},
+                 h_sex: dict = {"M": [], "F": []},
+                 h_morb_d: dict = {"T": [], "F": []},
+                 h_age_d: dict = {"1-25": [], "25-45": [],"45-65": [], "65+": []}) -> None:
         """
         Args:
         ----
@@ -39,7 +42,15 @@ class Swarm(pygame.sprite.Sprite):
         self.screen = screen_size
         self.objects: Objects = Objects()
         self.points_to_plot = plot
+        self.h_weight_plot = h_weight
+        self.h_sex_plot = h_sex
+        self.h_morb_plot = h_morb_d
+        self.h_age_plot = h_age_d
         self.datapoints: list = []
+        self.h_morb: list = []
+        self.h_age: list = []
+        self.h_sex: list = []
+        self.h_weight: list = []
 
     def add_agent(self, agent: Agent) -> None:
         """
@@ -113,12 +124,80 @@ class Swarm(pygame.sprite.Sprite):
 
         """
         # Count current numbers
-        values = {"S": 0, "I": 0, "R": 0, "D": 0}
+        values = {"S": 0, "I": 0, "R": 0, "D": 0, "H" : 0}
         for state in lst:
             values[state] += 1
 
         for x in values:
             self.points_to_plot[x].append(values[x])
+
+    def add_points_new(self, lst) -> None:
+        """
+        Plots the number of infected and recovered
+
+        Args:
+        ----
+            lst:
+
+        """
+        # Count current numbers
+        values = {"U": 0, "H": 0, "O": 0, "OB": 0}
+        for state in lst:
+            values[state] += 1
+
+        for x in values:
+            self.h_weight_plot[x].append(values[x])
+
+    def add_points_h_sex(self, lst) -> None:
+        """
+        Plots the number of infected and recovered
+
+        Args:
+        ----
+            lst:
+
+        """
+        # Count current numbers
+        values = {"M": 0, "F": 0}
+        for state in lst:
+            values[state] += 1
+
+        for x in values:
+            self.h_sex_plot[x].append(values[x])
+
+    def add_points_age(self, lst) -> None:
+        """
+        Plots the number of infected and recovered
+
+        Args:
+        ----
+            lst:
+
+        """
+        # Count current numbers
+        values = {"1-25": 0, "25-45": 0,"45-65": 0, "65+": 0}
+        for state in lst:
+            values[state] += 1
+
+        for x in values:
+            self.h_age_plot[x].append(values[x])
+
+    def add_points_h_morb(self, lst) -> None:
+        """
+        Plots the number of infected and recovered
+
+        Args:
+        ----
+            lst:
+
+        """
+        # Count current numbers
+        values = {"T": 0, "F": 0}
+        for state in lst:
+            values[state] += 1
+
+        for x in values:
+            self.h_morb_plot[x].append(values[x])
 
     def update(self) -> None:
         """
@@ -126,6 +205,10 @@ class Swarm(pygame.sprite.Sprite):
         points to be plotted. Finally, check if every agent is within the screen.
         """
         # update the movement
+        self.add_points_h_sex(self.h_sex)
+        self.add_points_h_morb(self.h_morb)
+        self.add_points_new(self.h_weight)
+        self.add_points_age(self.h_age)
         self.datapoints = []
         for agent in self.agents:
             agent.update_actions()
